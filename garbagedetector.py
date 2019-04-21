@@ -11,16 +11,16 @@ import urllib.request
 
 import datetime
 import time
-
+import motiondetection as md
 
 url='http://192.168.43.1:8080/shot.jpg'
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 print('start ', current_milli_time())
 
-
-while True:
-    time.sleep(10)
+isMtnDected = True
+while isMtnDected:
+    time.sleep(15)
 # Use urllib to get the image from the IP camera
     imgResponse = urllib.request.urlopen(url)
  
@@ -38,8 +38,16 @@ while True:
     
     write_name = date +'-loc1.jpg'
     print(write_name)
+    #global isMtnDected
+    print('is motion detected: before',isMtnDected)
+    isMtnDected = md.isMotionDetected()
+    print('is motion detected :After ',isMtnDected)
+    if (isMtnDected):
+        cv2.imwrite(write_name, img)
+    #else:
+     #   isMtnDected = False
+      #  break;
     
-    cv2.imwrite(write_name, img)
     original = cv2.imread(write_name)
  
 # Sift and Flann
